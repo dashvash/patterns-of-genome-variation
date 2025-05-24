@@ -85,12 +85,24 @@ Then we counted heterozigous SNP excluding C->T and G->A:
         echo "$file: $count"
     done
 
-### Сropping ancient reads
+#### Сropping ancient reads
 
 To crop ancient fasts reads from 5' and 3' ends by 7 bp, we used [chopper](https://github.com/wdecoster/chopper) tool:
 
         chopper --headcrop 7 --tailcrop 7 -i sample_name.fastq > sample_name_cropped.fastq
 
 The cropped fastq files were processed as the full ones (as described above)
+
+## Conclusion 
+
+We detected and eliminated the effect of well-known false calls C->T and G-A caused by C->U postmortem changes. However, even after filtering out these technical artifacts, we observed a higher proportion of high-impact genetic variants in ancient samples compared to modern populations. That is controversial for the relax selection hypothesis, which states the  increasing genetic load of high impact variants in the modern human population.According to this hypothesis, modern humans have a higher genetic load (increased frequency of harmful mutations) compared to ancient populations, where harsher selective pressures would have more efficiently removed such variants. 
+
+The presence of  high-impact variant rates in ancient genomes suggests several possible explanations:
+
+- There are still technical mistakes, because of ancient DNA additional treatment, degradation and postmortem changes.
+- Ancient populations may have experienced stronger genetic drift due to smaller effective population sizes, allowing some harmful alleles to reach higher frequencies despite selection. 
+
+To test both explanations, we plan to validate our results on additional ancient datasets and examine the dependency of genetic load on the type of aDNA treatment, sample age, and population.
+
 
 
