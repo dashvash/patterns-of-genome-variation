@@ -26,3 +26,21 @@ params-file nf-params.json contain paths to regerence genome, analysing fastq-fi
 As a result of genotyping we got vcf file for every sample and annotated them with [VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_download.html#docker) using Docker:
 
     docker run -v $HOME/vep_data:/data ensemblorg/ensembl-vep vep -i vcf/sample_name.unifiedgenotyper.vcf  --vcf -o sample_name.vep.vcf --cache --offline
+
+## VCF file processing
+
+After running VEP we got vcf file with annotated variants' impact levels: MODIFIER, LOW, MODERATE, HIGH.
+
+In the initial step, we quantified the total number of SNPs and the count of each of the four impact variants type:
+
+        grep -v '##' sample_name.vcf | wc -l
+        grep 'HIGH' sample_name.vcf | wc -l
+        grep 'MODERATE' sample_name.vcf | grep -v 'HIGH'| wc -l
+        grep 'LOW' sample_name.vcf | grep -v -e 'HIGH' -e 'MODERATE' | wc -l
+        grep 'MODIFIER' sample_name.vcf | grep -v -e 'HIGH' -e 'MODERATE' -e 'LOW' | wc -l
+
+### Сropping ancient reads
+
+To crop ancient fasts reads from 5' and 3' ends by 7 bp, we used [chopper](https://github.com/wdecoster/chopper) tool:
+
+        chopper --headcrop 7 --tailcrop 7 -i sample_name.fastq > sample_name_cropped.fastq
