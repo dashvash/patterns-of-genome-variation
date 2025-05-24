@@ -39,8 +39,58 @@ In the initial step, we quantified the total number of SNPs and the count of eac
         grep 'LOW' sample_name.vcf | grep -v -e 'HIGH' -e 'MODERATE' | wc -l
         grep 'MODIFIER' sample_name.vcf | grep -v -e 'HIGH' -e 'MODERATE' -e 'LOW' | wc -l
 
+To count SNPs with each type of substitution (A->T, A->C etc.) we used a bash script:
+
+    output_file="substitution.txt"
+    echo -n "" > "$output_file"  
+
+    for file in *.vcf; do
+        echo "File: $file" >> "$output_file"
+        
+        total_snps=$(grep -v "^#" "$file" | awk 'length($4)==1 && length($5)==1' | wc -l)
+
+        if [ "$total_snps" -eq 0 ]; then
+            echo "  No SNPs found." >> "$output_file"
+            echo "" >> "$output_file"
+            continue
+        fi
+
+        for ref in A C G T; do
+            for alt in A C G T; do
+                if [ "$ref" != "$alt" ]; then
+                    count=$(grep -v "^#" "$file" | awk -v r="$ref" -v a="$alt" '$4==r && $5==a' | wc -l)
+                    percent=$(awk -v c="$count" -v t="$total_snps" 'BEGIN { printf "%.2f", (c/t)*100 }')
+                    echo "  $ref->$alt: $count SNPs (${percent}%)" >> "$output_file"
+                fi
+            done
+        done
+
+        echo "" >> "$output_file"
+    done
+
+The output file substitution.txt can be found in this repository.
+
+To count VEP annotated variants without C->T and G->A substitution we run the following commands:
+
+    awk '!/^##/ && !($4 == "C" && $5 == "T") && !($4 == "G" && $5 == "A")' sample_name.vcf | wc -l
+    awk '$0 ~ /HIGH/ && !($4 == "C" && $5 == "T") && !($4 == "G" && $5 == "A")' sample_name.vcf | wc -l
+    awk '$0 ~ /MODERATE/ && $0 !~ /HIGH/ && !($4 == "C" && $5 == "T") && !($4 == "G" && $5 == "A")' sample_name.vcf | wc -l
+    awk '$0 ~ /LOW/ && $0 !~ /HIGH/ && $0 !~ /MODERATE/ && !($4 == "C" && $5 == "T") && !($4 == "G" && $5 == "A")' sample_name.vcf | wc -l
+    awk '$0 ~ /MODIFIER/ && $0 !~ /HIGH/ && $0 !~ /MODERATE/ && $0 !~ /LOW/ && !($4 == "C" && $5 == "T") && !($4 == "G" && $5 == "A")' sample_name.vcf | wc -l
+
+Then we counted heterozigous SNP excluding C->T and G->A:
+
+    for file in *.vcf; do
+        count=$(awk -F'\t' '($4 != "C"  $5 != "T") && ($4 != "G"  $5 != "A") && /0\/1/' "$file" | wc -l)
+        echo "$file: $count"
+    done
+
 ### Сropping ancient reads
 
 To crop ancient fasts reads from 5' and 3' ends by 7 bp, we used [chopper](https://github.com/wdecoster/chopper) tool:
 
         chopper --headcrop 7 --tailcrop 7 -i sample_name.fastq > sample_name_cropped.fastq
+
+The cropped fastq files were processed as the full ones (as described above)
+
+
