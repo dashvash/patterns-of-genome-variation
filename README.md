@@ -39,6 +39,13 @@ In the initial step, we quantified the total number of SNPs and the count of eac
         grep 'LOW' sample_name.vcf | grep -v -e 'HIGH' -e 'MODERATE' | wc -l
         grep 'MODIFIER' sample_name.vcf | grep -v -e 'HIGH' -e 'MODERATE' -e 'LOW' | wc -l
 
+On the first stage of analysis we observed a statistically significant difference in the frequency of high-impact variants between ancient and modern samples, with a notably higher burden in ancient populations.
+
+The difference likely reflects false-positive variants introduced by postmortem damage in ancient DNA:
+
+
+![](images/boxplots.png)
+
 To count SNPs with each type of substitution (A->T, A->C etc.) we used a bash script:
 
     output_file="substitution.txt"
@@ -70,6 +77,12 @@ To count SNPs with each type of substitution (A->T, A->C etc.) we used a bash sc
 
 The output file substitution.txt can be found in this repository.
 
+We observed higher C->T (and G->A) substitutions % in ancient samples: 
+
+![](images/C-T_substitution_optimized.png)
+
+Postmortem C->T ang G->A substitutions lead to increase in false-positive impact variants, so we filtered them out.
+
 To count VEP annotated variants without C->T and G->A substitution we run the following commands:
 
     awk '!/^##/ && !($4 == "C" && $5 == "T") && !($4 == "G" && $5 == "A")' sample_name.vcf | wc -l
@@ -95,14 +108,15 @@ The cropped fastq files were processed as the full ones (as described above)
 
 ## Conclusion 
 
-We detected and eliminated the effect of well-known false calls C->T and G-A caused by C->U postmortem changes. However, even after filtering out these technical artifacts, we observed a higher proportion of high-impact genetic variants in ancient samples compared to modern populations. That is controversial for the relax selection hypothesis, which states the  increasing genetic load of high impact variants in the modern human population.According to this hypothesis, modern humans have a higher genetic load (increased frequency of harmful mutations) compared to ancient populations, where harsher selective pressures would have more efficiently removed such variants. 
+In our analysis, we detected a significantly higher proportion of protein-altering genetic variants in the ancient genomes compared to contemporary ones. While we detected and eliminated the effect of well-known false calls C->T and G-A caused by C->U postmortem changes, we still observed a higher proportion of high-impact genetic variants in ancient samples compared to modern populations. That contradicts the relaxed selection hypothesis, which states the  increasing genetic load of high impact variants in the modern human population.According to this hypothesis, modern humans have a higher genetic load (increased frequency of harmful mutations) compared to ancient populations, where harsher selective pressures would have more efficiently removed such variants. 
 
 The presence of  high-impact variant rates in ancient genomes suggests several possible explanations:
 
-- There are still technical mistakes, because of ancient DNA additional treatment, degradation and postmortem changes.
-- Ancient populations may have experienced stronger genetic drift due to smaller effective population sizes, allowing some harmful alleles to reach higher frequencies despite selection. 
-
+- There are still technical artifacts among the final set of variant calls, resulting from ancient DNA treatment, contamination, degradation, or postmortem changes.
+- Ancient populations may have experienced stronger genetic drift due to smaller effective population sizes, allowing some harmful alleles to reach higher frequencies despite selection.
+  
 To test both explanations, we plan to validate our results on additional ancient datasets and examine the dependency of genetic load on the type of aDNA treatment, sample age, and population.
+
 
 
 
