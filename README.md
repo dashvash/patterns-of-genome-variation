@@ -111,8 +111,7 @@ The cropped fastq files were processed as the full ones (as described above)
 
 Even after cropping and filtering out C->T and G->A there is difference between modern and ancient samples:
 
-![](variant_impact_comparison_95-100.png)
-
+![](images/variant_impact_comparison_95-100.png)
 
 ## Conclusion 
 
@@ -125,6 +124,11 @@ The presence of  high-impact variant rates in ancient genomes suggests several p
   
 To test both explanations, we plan to validate our results on additional ancient datasets and examine the dependency of genetic load on the type of aDNA treatment, sample age, and population.
 
+## References
 
+1. Orlando, L., Allaby, R., Skoglund, P., Der Sarkissian, C., Stockhammer, P. W., Ávila-Arcos, M. C., ... & Warinner, C. (2021). Ancient DNA analysis. Nature reviews methods primers, 1(1), 14.
+2. Mallick, S., Micco, A., Mah, M., Ringbauer, H., Lazaridis, I., Olalde, I., ... & Reich, D. (2024). The Allen Ancient DNA Resource (AADR) a curated compendium of ancient human genomes. Scientific Data, 11(1), 182.
+3. Margaryan, A., Lawson, D. J., Sikora, M., Racimo, F., Rasmussen, S., Moltke, I., ... & Willerslev, E. (2020). Population genomics of the Viking world. Nature, 585(7825), 390-396.
+4. Yates, J. A. F., Lamnidis, T. C., Borry, M., Valtueña, A. A., Fagernäs, Z., Clayton, S., ... & Peltzer, A. (2021). Reproducible, portable, and efficient ancient genome reconstruction with nf-core/eager. PeerJ, 9, e10947.
 
 
