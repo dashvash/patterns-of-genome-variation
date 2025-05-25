@@ -98,6 +98,9 @@ Then we counted heterozigous SNP excluding C->T and G->A:
         echo "$file: $count"
     done
 
+Het/Hom ratio metric supports that all the SNPs in cropped reads, excluding C->T and G->A, can be considered true:
+![](images/het_hom_comparison.png)
+
 #### Сropping ancient reads
 
 To crop ancient fasts reads from 5' and 3' ends by 7 bp, we used [chopper](https://github.com/wdecoster/chopper) tool:
@@ -105,6 +108,11 @@ To crop ancient fasts reads from 5' and 3' ends by 7 bp, we used [chopper](https
         chopper --headcrop 7 --tailcrop 7 -i sample_name.fastq > sample_name_cropped.fastq
 
 The cropped fastq files were processed as the full ones (as described above)
+
+Even after cropping and filtering out C->T and G->A there is difference between modern and ancient samples:
+
+![](variant_impact_comparison_95-100.png)
+
 
 ## Conclusion 
 
